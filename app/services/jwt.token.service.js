@@ -12,12 +12,13 @@ function JwtTokenService() {
      * @param {User} user User entity object
      * @return {String} jwt_token JWT Token
      */
-    let createToken = function(user) {
+    let createToken = function(payload) {
         // Payload object generation
         var payload = {
-            sub: user,
+            sub: payload.user,
             iat: moment().unix(),
             exp: moment().add(14, "days").unix(),
+            provider: payload.provider
           };
           
           // return JWT Token generated
@@ -25,7 +26,7 @@ function JwtTokenService() {
     }
 
     let decodeToken = function(token) {
-        console.log('JWT Token service... '  , jwt.decode(token, TOKEN_SECRET));
+        return jwt.decode(token, TOKEN_SECRET);
     }
 
     return {
@@ -34,4 +35,4 @@ function JwtTokenService() {
     }
 }
 
-module.exports = JwtTokenService;
+module.exports = new JwtTokenService();
